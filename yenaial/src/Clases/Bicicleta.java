@@ -1,63 +1,33 @@
 package Clases;
 
-import java.util.List;
-
 public class Bicicleta {
-    private int id_bicleta;
     private String marca;
     private String modelo;
     private String color;
-    private List<Cliente> dueño;
+    private Cliente propietario;
 
-    public Bicicleta (){
-
-    }
-
-    public Bicicleta(int id_bicleta, String marca, String modelo, String color, List<Cliente> dueño) {
-        this.id_bicleta = id_bicleta;
+    public Bicicleta(String marca, String modelo, String color, Cliente propietario) {
         this.marca = marca;
         this.modelo = modelo;
         this.color = color;
-        this.dueño = dueño;
+        this.propietario = propietario;
     }
 
-    public int getId_bicleta() {
-        return id_bicleta;
-    }
+    // Getters y setters
+    public String getMarca() { return marca; }
+    public void setMarca(String marca) { this.marca = marca; }
 
-    public void setId_bicleta(int id_bicleta) {
-        this.id_bicleta = id_bicleta;
-    }
+    public String getModelo() { return modelo; }
+    public void setModelo(String modelo) { this.modelo = modelo; }
 
-    public String getMarca() {
-        return marca;
-    }
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
 
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
+    public Cliente getPropietario() { return propietario; }
+    public void setPropietario(Cliente propietario) { this.propietario = propietario; }
 
-    public String getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public List<Cliente> getDueño() {
-        return dueño;
-    }
-
-    public void setDueño(List<Cliente> dueño) {
-        this.dueño = dueño;
+    @Override
+    public String toString() {
+        return marca + " " + modelo + " (" + color + ") — Propietario: " + propietario.getNombre();
     }
 }
