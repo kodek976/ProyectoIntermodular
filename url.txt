@@ -1,1 +1,2 @@
 http://54.156.230.183/phpmyadmin/index.php
+http://54.156.230.183/phpmyadmin/index.php?route=/database/structure&db=yenaial
