@@ -1,0 +1,1 @@
+http://54.156.230.183/phpmyadmin/index.php
