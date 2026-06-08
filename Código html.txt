@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YENAIAL - Taller de Bicicletas</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #111111;
+    --bg2: #1a1a1a;
+    --card: #1e1e1e;
+    --card2: #252525;
+    --border: #2a2a2a;
+    --blue: #3399FF;
+    --blue-dim: rgba(51,153,255,0.15);
+    --blue-dim2: rgba(51,153,255,0.08);
+    --white: #ffffff;
+    --gray: #8a8a8a;
+    --gray2: #555555;
+    --green: #22c55e;
+    --red: #ef4444;
+    --orange: #f97316;
+    --font-head: 'Rajdhani', sans-serif;
+    --font-body: 'Exo 2', sans-serif;
+  }
+ 
+  * { margin:0; padding:0; box-sizing:border-box; }
+ 
+  body {
+    background: var(--bg);
+    font-family: var(--font-body);
+    color: var(--white);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+ 
+  /* APP CONTAINER */
+  .app {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+ 
+  /* SCREENS */
+  .screen {
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+    animation: fadeIn 0.25s ease;
+  }
+  .screen.active { display: flex; }
+ 
+  @keyframes fadeIn {
+    from { opacity:0; transform: translateY(8px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+ 
+  /* ===================== LOGIN ===================== */
+  #screen-login {
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 24px 20px;
+  }
+ 
+  .login-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+ 
+  .logo-box {
+    width: 72px; height: 72px;
+    background: #1c2a3a;
+    border: 2px solid var(--blue);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .logo-box svg { width: 48px; height: 48px; }
+ 
+  .logo-name {
+    font-family: var(--font-head);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--white);
+  }
+  .logo-sub {
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 1px;
+  }
+ 
+  .login-card {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+  }
+ 
+  .login-card h2 {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--white);
+  }
+ 
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    color: var(--gray);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+ 
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-wrap svg {
+    position: absolute;
+    left: 12px;
+    color: var(--gray);
+    width: 16px; height: 16px;
+    flex-shrink: 0;
+  }
+  .input-wrap input {
+    width: 100%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 38px;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-wrap input:focus { border-color: var(--blue); }
+  .input-wrap input::placeholder { color: var(--gray2); }
+  .eye-btn {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray);
+    padding: 0;
+    display: flex;
+  }
+ 
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .checkbox-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--gray);
+    cursor: pointer;
+  }
+  .checkbox-wrap input[type="checkbox"] {
+    accent-color: var(--blue);
+    width: 14px; height: 14px;
+  }
+ 
+  .link-blue {
+    font-size: 13px;
+    color: var(--blue);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .link-blue:hover { text-decoration: underline; }
+ 
+  .btn-primary {
+    width: 100%;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-family: var(--font-head);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-primary:hover { background: #2288ee; }
+  .btn-primary:active { transform: scale(0.98); }
+ 
+  .divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    gap: 12px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider span { width: 6px; height: 6px; background: var(--border); border-radius: 50%; }
+ 
+  .login-register {
+    text-align: center;
+    font-size: 13px;
+    color: var(--gray);
+  }
+ 
+  .login-footer {
+    font-size: 11px;
+    color: var(--gray2);
+    text-align: center;
+    padding-bottom: 10px;
+  }
+ 
+  /* ===================== TOP HEADER (dashboard+) ===================== */
+  .top-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .top-header .logo-box-sm {
+    width: 32px; height: 32px;
+    background: #1c2a3a;
+    border: 1.5px solid var(--blue);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .top-header .logo-box-sm svg { width: 20px; height: 20px; }
+  .header-text { line-height: 1.2; }
+  .header-text .name {
+    font-family: var(--font-head);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .header-text .sub {
+    font-size: 9px;
+    color: var(--gray);
+    letter-spacing: 0.5px;
+  }
+ 
+  /* SCROLLABLE CONTENT */
+  .scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px 16px;
+    padding-bottom: 80px;
+  }
+  .scroll-content::-webkit-scrollbar { width: 3px; }
+  .scroll-content::-webkit-scrollbar-track { background: transparent; }
+  .scroll-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+ 
+  .page-title { margin-bottom: 14px; }
+  .page-title h2 {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .page-title p { font-size: 12px; color: var(--gray); margin-top: 2px; }
+ 
+  /* ===================== BOTTOM NAV ===================== */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    z-index: 100;
+  }
+ 
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 0 8px;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+    color: var(--gray);
+    border: none;
+    background: none;
+  }
+  .nav-item.active { color: var(--blue); }
+  .nav-item.active::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 25%; width: 50%; height: 2px;
+    background: var(--blue);
+    border-radius: 0 0 3px 3px;
+  }
+  .nav-item svg { width: 22px; height: 22px; }
+  .nav-item span { font-size: 10px; font-family: var(--font-body); letter-spacing: 0.3px; }
+ 
+  /* ===================== DASHBOARD ===================== */
+  .estado-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .estado-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .estado-label { font-size: 12px; color: var(--gray); margin-bottom: 3px; }
+  .estado-value {
+    color: var(--blue);
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .estado-icon {
+    width: 40px; height: 40px;
+    background: var(--blue-dim);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--blue);
+  }
+  .estado-icon svg { width: 20px; height: 20px; color: var(--blue); }
+ 
+  .progress-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .step-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .step-bar .fill { height: 100%; background: var(--blue); border-radius: 2px; }
+  .step-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--border);
+    border: 2px solid var(--border);
+    transition: all 0.3s;
+  }
+  .step-dot.done { background: var(--blue); border-color: var(--blue); }
+  .step-dot.done svg { color: var(--white); }
+  .step-dot.partial { background: var(--bg2); border-color: var(--blue); }
+  .step-dot svg { width: 10px; height: 10px; color: var(--gray2); }
+  .step-name { font-size: 9px; color: var(--gray); text-align: center; }
+  .step-name.active { color: var(--blue); }
+ 
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--blue);
+    line-height: 1;
+  }
+  .stat-label { font-size: 10px; color: var(--gray); margin-top: 3px; }
+  .stat-label.green { color: var(--green); }
+  .stat-label.red { color: var(--red); }
+ 
+  .section-title {
+    font-family: var(--font-head);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    color: var(--white);
+  }
+ 
+  .activity-list { display: flex; flex-direction: column; gap: 8px; }
+  .activity-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .activity-left { display: flex; align-items: center; gap: 10px; }
+  .activity-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+  }
+  .activity-info .title { font-size: 13px; font-weight: 500; }
+  .activity-info .time { font-size: 11px; color: var(--gray); margin-top: 2px; }
+  .activity-arrow { color: var(--blue); }
+  .activity-arrow svg { width: 14px; height: 14px; }
+ 
+  /* FAB */
+  .fab {
+    position: fixed;
+    bottom: 80px;
+    right: calc(50% - 240px + 20px);
+    width: 46px; height: 46px;
+    background: var(--blue);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(51,153,255,0.4);
+    z-index: 99;
+    transition: transform 0.2s;
+  }
+  .fab:hover { transform: scale(1.1); }
+  .fab svg { color: white; width: 20px; height: 20px; }
+ 
+  @media (max-width: 480px) {
+    .fab { right: 20px; }
+  }
+ 
+  /* ===================== GARAGE ===================== */
+  .bike-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .bike-icon-wrap {
+    width: 100%;
+    background: var(--bg2);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .bike-icon-wrap svg { width: 80px; height: 80px; color: var(--blue); }
+  .bike-name {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .bike-details {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .bike-detail {
+    text-align: center;
+    background: var(--bg2);
+    border-radius: 8px;
+    padding: 8px 6px;
+  }
+  .bike-detail .d-label { font-size: 10px; color: var(--gray); margin-bottom: 3px; }
+  .bike-detail .d-value { font-size: 13px; font-weight: 600; color: var(--white); }
+ 
+  .comp-list { display: flex; flex-direction: column; gap: 8px; }
+  .comp-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .comp-icon {
+    width: 36px; height: 36px;
+    background: var(--blue-dim);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .comp-icon svg { width: 18px; height: 18px; color: var(--blue); }
+  .comp-info { flex: 1; }
+  .comp-info .c-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .comp-info .c-model { font-size: 11px; color: var(--gray); }
+  .comp-info .c-status { font-size: 11px; margin-top: 3px; }
+  .comp-info .c-status.good { color: var(--green); }
+  .comp-info .c-status.warning { color: var(--red); }
+  .comp-info .c-status.ok { color: var(--green); }
+  .comp-right { text-align: right; }
+  .comp-right .c-time { font-size: 10px; color: var(--gray); }
+  .comp-right svg { width: 14px; height: 14px; color: var(--gray2); margin-top: 4px; }
+ 
+  /* ===================== RESERVAS ===================== */
+  .calendar-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .cal-header .month {
+    font-family: var(--font-head);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .cal-nav { background: none; border: none; cursor: pointer; color: var(--gray); padding: 4px; }
+  .cal-nav svg { width: 16px; height: 16px; }
+  .cal-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .cal-days-header span { font-size: 11px; color: var(--gray); padding: 4px 0; }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
+  }
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--gray);
+  }
+  .cal-day.empty { cursor: default; }
+  .cal-day.available {
+    color: var(--white);
+    border: 1.5px solid var(--blue);
+  }
+  .cal-day.available:hover { background: var(--blue-dim); }
+  .cal-day.selected {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: white;
+    font-weight: 600;
+  }
+  .cal-day.today { color: var(--blue); font-weight: 600; }
+ 
+  .time-section { margin-bottom: 14px; }
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .time-btn {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 6px;
+    text-align: center;
+    font-size: 13px;
+    font-family: var(--font-body);
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .time-btn:hover { border-color: var(--blue); }
+  .time-btn.selected { background: var(--blue); border-color: var(--blue); color: white; font-weight: 600; }
+  .time-btn.disabled { color: var(--gray2); cursor: default; }
+ 
+  .summary-box {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .summary-box svg { color: var(--blue); width: 18px; height: 18px; flex-shrink: 0; }
+  .summary-box .s-label { font-size: 11px; color: var(--gray); margin-bottom: 3px; }
+  .summary-box .s-value { font-size: 14px; font-weight: 600; color: var(--white); }
+ 
+  .btn-confirm {
+    width: 100%;
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: var(--font-head);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 14px;
+  }
+  .btn-confirm:hover { background: #2288ee; }
+ 
+  /* ===================== PRESUPUESTO ===================== */
+  .budget-ref-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .budget-doc-icon {
+    width: 44px; height: 44px;
+    background: var(--blue-dim);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--blue);
+    flex-shrink: 0;
+  }
+  .budget-doc-icon svg { width: 22px; height: 22px; color: var(--blue); }
+  .budget-ref-info .ref-num {
+    font-family: var(--font-head);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+  .budget-ref-info .ref-date { font-size: 12px; color: var(--gray); margin-top: 2px; }
+ 
+  .budget-meta {
+    display: flex;
+    gap: 20px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .meta-item { display: flex; align-items: center; gap: 8px; }
+  .meta-item svg { width: 16px; height: 16px; color: var(--blue); }
+  .meta-item .m-label { font-size: 11px; color: var(--gray); }
+  .meta-item .m-value { font-size: 13px; font-weight: 500; }
+ 
+  .services-table {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .table-head {
+    display: grid;
+    grid-template-columns: 1fr 56px 56px 56px;
+    padding: 10px 14px;
+    background: var(--card2);
+    border-bottom: 1px solid var(--border);
+  }
+  .table-head span {
+    font-size: 11px;
+    color: var(--gray);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .table-head span:not(:first-child) { text-align: right; }
+  .table-row {
+    display: grid;
+    grid-template-columns: 1fr 56px 56px 56px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .table-row:last-child { border-bottom: none; }
+  .row-service .rs-name { font-size: 13px; font-weight: 500; }
+  .row-service .rs-sub { font-size: 11px; color: var(--gray); margin-top: 1px; }
+  .row-num {
+    font-size: 13px;
+    text-align: right;
+    color: var(--gray);
+  }
+  .row-total { font-size: 13px; text-align: right; font-weight: 600; color: var(--white); }
+ 
+  .table-total {
+    display: grid;
+    grid-template-columns: 1fr 56px 56px 56px;
+    padding: 12px 14px;
+    background: var(--blue-dim2);
+    border-top: 2px solid var(--blue);
+  }
+  .table-total .total-label {
+    font-family: var(--font-head);
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .table-total .total-val {
+    grid-column: 4;
+    text-align: right;
+    font-family: var(--font-head);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--blue);
+  }
+ 
+  .prev-budgets { margin-bottom: 14px; }
+  .prev-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    opacity: 0.6;
+  }
+  .prev-item svg { width: 16px; height: 16px; color: var(--gray); }
+  .prev-info .p-num { font-size: 13px; color: var(--gray); }
+  .prev-info .p-date { font-size: 11px; color: var(--gray2); margin-top: 2px; }
+  .prev-amount { margin-left: auto; font-size: 13px; color: var(--gray); }
+ 
+  /* Notification toast */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--card2);
+    border: 1px solid var(--blue);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 13px;
+    color: var(--white);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 200;
+    white-space: nowrap;
+    pointer-events: none;
+    max-width: 90%;
+    text-align: center;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+<div class="app">
+ 
+  <!-- ===================== TOAST ===================== -->
+  <div class="toast" id="toast"></div>
+ 
+  <!-- ===================== LOGIN SCREEN ===================== -->
+  <div class="screen active" id="screen-login">
+    <div class="login-top">
+      <div class="logo-box">
+        <!-- YENAIAL Logo SVG -->
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Gear/cog -->
+          <circle cx="50" cy="50" r="18" stroke="#3399FF" stroke-width="4" fill="none"/>
+          <circle cx="50" cy="50" r="8" fill="#3399FF"/>
+          <!-- Gear teeth -->
+          <rect x="47" y="20" width="6" height="12" rx="2" fill="#3399FF"/>
+          <rect x="47" y="68" width="6" height="12" rx="2" fill="#3399FF"/>
+          <rect x="20" y="47" width="12" height="6" rx="2" fill="#3399FF"/>
+          <rect x="68" y="47" width="12" height="6" rx="2" fill="#3399FF"/>
+          <rect x="28" y="28" width="8" height="8" rx="2" fill="#3399FF" transform="rotate(45 32 32)"/>
+          <rect x="64" y="28" width="8" height="8" rx="2" fill="#3399FF" transform="rotate(45 68 32)"/>
+          <rect x="64" y="64" width="8" height="8" rx="2" fill="#3399FF" transform="rotate(45 68 68)"/>
+          <rect x="28" y="64" width="8" height="8" rx="2" fill="#3399FF" transform="rotate(45 32 68)"/>
+          <!-- Bike wheel left -->
+          <circle cx="30" cy="62" r="8" stroke="#3399FF" stroke-width="3" fill="none"/>
+          <!-- Bike wheel right -->
+          <circle cx="70" cy="62" r="8" stroke="#3399FF" stroke-width="3" fill="none"/>
+          <!-- Bike frame -->
+          <line x1="38" y1="62" x2="50" y2="44" stroke="#3399FF" stroke-width="3"/>
+          <line x1="50" y1="44" x2="62" y2="62" stroke="#3399FF" stroke-width="3"/>
+          <line x1="50" y1="44" x2="30" y2="62" stroke="#3399FF" stroke-width="2"/>
+          <line x1="44" y1="54" x2="62" y2="62" stroke="#3399FF" stroke-width="2"/>
+          <!-- Handlebar -->
+          <line x1="50" y1="44" x2="50" y2="36" stroke="#3399FF" stroke-width="3"/>
+          <line x1="44" y1="36" x2="56" y2="36" stroke="#3399FF" stroke-width="3"/>
+          <!-- Seat -->
+          <line x1="44" y1="54" x2="44" y2="46" stroke="#3399FF" stroke-width="2.5"/>
+          <line x1="40" y1="46" x2="48" y2="46" stroke="#3399FF" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div class="logo-name">YENAIAL</div>
+      <div class="logo-sub">Taller de Bicicletas</div>
+    </div>
+ 
+    <div class="login-card">
+      <h2>Iniciar Sesión</h2>
+      <div class="form-group">
+        <label>Correo Electrónico</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+          <input type="email" placeholder="tu@email.com" id="inp-email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" placeholder="••••••••" id="inp-pass" value="password123">
+          <button class="eye-btn" onclick="togglePass()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="checkbox-wrap">
+          <input type="checkbox" checked> Recordarme
+        </label>
+        <a class="link-blue">¿Olvidaste tu contraseña?</a>
+      </div>
+      <button class="btn-primary" onclick="goTo('dashboard')">Iniciar Sesión</button>
+      <div class="divider"><span></span></div>
+      <div class="login-register">¿No tienes una cuenta? <a class="link-blue">Regístrate</a></div>
+    </div>
+    <div class="login-footer">© 2026 YENAIAL - Taller de Bicicletas. Todos los derechos reservados.</div>
+  </div>
+ 
+  <!-- ===================== DASHBOARD SCREEN ===================== -->
+  <div class="screen" id="screen-dashboard">
+    <div class="top-header">
+      <div class="logo-box-sm">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="10" stroke="#3399FF" stroke-width="3" fill="none"/>
+          <circle cx="30" cy="30" r="4" fill="#3399FF"/>
+          <rect x="28" y="12" width="4" height="8" rx="1" fill="#3399FF"/>
+          <rect x="28" y="40" width="4" height="8" rx="1" fill="#3399FF"/>
+          <rect x="12" y="28" width="8" height="4" rx="1" fill="#3399FF"/>
+          <rect x="40" y="28" width="8" height="4" rx="1" fill="#3399FF"/>
+          <line x1="18" y1="37" x2="22" y2="37" stroke="#3399FF" stroke-width="2.5"/>
+          <circle cx="18" cy="37" r="5" stroke="#3399FF" stroke-width="2" fill="none"/>
+          <circle cx="42" cy="37" r="5" stroke="#3399FF" stroke-width="2" fill="none"/>
+          <line x1="23" y1="37" x2="30" y2="27" stroke="#3399FF" stroke-width="2"/>
+          <line x1="30" y1="27" x2="37" y2="37" stroke="#3399FF" stroke-width="2"/>
+          <line x1="30" y1="27" x2="18" y2="37" stroke="#3399FF" stroke-width="1.5"/>
+          <line x1="27" y1="32" x2="37" y2="37" stroke="#3399FF" stroke-width="1.5"/>
+          <line x1="30" y1="27" x2="30" y2="22" stroke="#3399FF" stroke-width="2"/>
+          <line x1="27" y1="22" x2="33" y2="22" stroke="#3399FF" stroke-width="2"/>
+          <line x1="27" y1="32" x2="27" y2="27" stroke="#3399FF" stroke-width="1.5"/>
+          <line x1="25" y1="27" x2="29" y2="27" stroke="#3399FF" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <div class="name">YENAIAL</div>
+        <div class="sub">Taller de Bicicletas</div>
+      </div>
+    </div>
+ 
+    <div class="scroll-content">
+      <div class="page-title">
+        <h2>Panel de control</h2>
+      </div>
+ 
+      <!-- Estado actual -->
+      <div class="estado-card">
+        <div class="estado-top">
+          <div>
+            <div class="estado-label">Estado actual</div>
+            <div class="estado-value">Reparación</div>
+          </div>
+          <div class="estado-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+        </div>
+        <div class="progress-steps">
+          <div class="step">
+            <div class="step-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="step-bar"><div class="fill" style="width:100%"></div></div>
+            <div class="step-name active">Diagnóstico</div>
+          </div>
+          <div class="step">
+            <div class="step-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="step-bar"><div class="fill" style="width:100%"></div></div>
+            <div class="step-name active">Reparación</div>
+          </div>
+          <div class="step">
+            <div class="step-dot partial"><svg viewBox="0 0 24 24" fill="none" stroke="#3399FF" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="step-bar"><div class="fill" style="width:50%"></div></div>
+            <div class="step-name">Pruebas</div>
+          </div>
+          <div class="step">
+            <div class="step-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="step-bar"><div class="fill" style="width:0%"></div></div>
+            <div class="step-name">Listo</div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num">15</div>
+          <div class="stat-label" style="color:var(--blue)">días</div>
+          <div class="stat-label" style="font-size:9px; color:var(--gray)">Próximo servicio</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">8/10</div>
+          <div class="stat-label green">Componentes OK</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2</div>
+          <div class="stat-label red">Alertas</div>
+        </div>
+      </div>
+ 
+      <!-- Actividad reciente -->
+      <div class="section-title">Actividad reciente</div>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="activity-left">
+            <div class="activity-dot"></div>
+            <div class="activity-info">
+              <div class="title">Cambio de frenos</div>
+              <div class="time">Hace 3 días</div>
+            </div>
+          </div>
+          <div class="activity-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-left">
+            <div class="activity-dot"></div>
+            <div class="activity-info">
+              <div class="title">Ajuste de cambios</div>
+              <div class="time">Hace 1 semana</div>
+            </div>
+          </div>
+          <div class="activity-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-left">
+            <div class="activity-dot"></div>
+            <div class="activity-info">
+              <div class="title">Lubricación cadena</div>
+              <div class="time">Hace 2 semanas</div>
+            </div>
+          </div>
+          <div class="activity-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- FAB -->
+    <button class="fab" onclick="showToast('Nueva actividad agregada')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </button>
+ 
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="goTo('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button class="nav-item" onclick="goTo('garage')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
+        <span>Garaje</span>
+      </button>
+      <button class="nav-item" onclick="goTo('reservas')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Reservas</span>
+      </button>
+      <button class="nav-item" onclick="goTo('presupuesto')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Presupuesto</span>
+      </button>
+    </nav>
+  </div>
+ 
+  <!-- ===================== GARAGE SCREEN ===================== -->
+  <div class="screen" id="screen-garage">
+    <div class="top-header">
+      <div class="logo-box-sm">
+        <svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="10" stroke="#3399FF" stroke-width="3" fill="none"/><circle cx="30" cy="30" r="4" fill="#3399FF"/><rect x="28" y="12" width="4" height="8" rx="1" fill="#3399FF"/><rect x="28" y="40" width="4" height="8" rx="1" fill="#3399FF"/><rect x="12" y="28" width="8" height="4" rx="1" fill="#3399FF"/><rect x="40" y="28" width="8" height="4" rx="1" fill="#3399FF"/><circle cx="18" cy="37" r="5" stroke="#3399FF" stroke-width="2" fill="none"/><circle cx="42" cy="37" r="5" stroke="#3399FF" stroke-width="2" fill="none"/><line x1="23" y1="37" x2="30" y2="27" stroke="#3399FF" stroke-width="2"/><line x1="30" y1="27" x2="37" y2="37" stroke="#3399FF" stroke-width="2"/><line x1="30" y1="27" x2="30" y2="22" stroke="#3399FF" stroke-width="2"/><line x1="27" y1="22" x2="33" y2="22" stroke="#3399FF" stroke-width="2"/></svg>
+      </div>
+      <div class="header-text">
+        <div class="name">YENAIAL</div>
+        <div class="sub">Taller de Bicicletas</div>
+      </div>
+    </div>
+ 
+    <div class="scroll-content">
+      <div class="page-title">
+        <h2>Mi Garaje</h2>
+        <p>Ficha técnica de tu bicicleta</p>
+      </div>
+ 
+      <div class="bike-card">
+        <div class="bike-icon-wrap">
+          <svg viewBox="0 0 120 80" fill="none" stroke="#3399FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Wheels -->
+            <circle cx="25" cy="55" r="18"/>
+            <circle cx="95" cy="55" r="18"/>
+            <circle cx="25" cy="55" r="3" fill="#3399FF"/>
+            <circle cx="95" cy="55" r="3" fill="#3399FF"/>
+            <!-- Spokes left -->
+            <line x1="25" y1="37" x2="25" y2="55"/><line x1="43" y1="55" x2="25" y2="55"/><line x1="38" y1="43" x2="25" y2="55"/><line x1="12" y1="43" x2="25" y2="55"/>
+            <!-- Spokes right -->
+            <line x1="95" y1="37" x2="95" y2="55"/><line x1="113" y1="55" x2="95" y2="55"/><line x1="108" y1="43" x2="95" y2="55"/><line x1="82" y1="43" x2="95" y2="55"/>
+            <!-- Frame -->
+            <line x1="43" y1="55" x2="60" y2="28"/>
+            <line x1="60" y1="28" x2="77" y2="55"/>
+            <line x1="60" y1="28" x2="43" y2="55" stroke-width="2"/>
+            <line x1="55" y1="40" x2="77" y2="55"/>
+            <!-- Fork to front wheel -->
+            <line x1="43" y1="55" x2="25" y2="55" stroke-width="1.5"/>
+            <!-- Seatstay -->
+            <line x1="77" y1="55" x2="95" y2="55" stroke-width="1.5"/>
+            <!-- Handlebar stem -->
+            <line x1="60" y1="28" x2="62" y2="18"/>
+            <line x1="56" y1="18" x2="68" y2="18"/>
+            <!-- Seat post -->
+            <line x1="55" y1="40" x2="55" y2="28"/>
+            <line x1="50" y1="28" x2="60" y2="28"/>
+            <!-- Chain ring -->
+            <circle cx="60" cy="48" r="6"/>
+          </svg>
+        </div>
+        <div class="bike-name">Trek Marlin 7</div>
+        <div class="bike-details">
+          <div class="bike-detail">
+            <div class="d-label">Año</div>
+            <div class="d-value">2023</div>
+          </div>
+          <div class="bike-detail">
+            <div class="d-label">Color</div>
+            <div class="d-value" style="font-size:11px">Azul Metálico</div>
+          </div>
+          <div class="bike-detail">
+            <div class="d-label">Kilometraje</div>
+            <div class="d-value" style="font-size:12px">1,245 km</div>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="section-title">Componentes</div>
+      <div class="comp-list">
+        <!-- Frenos -->
+        <div class="comp-item">
+          <div class="comp-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+          </div>
+          <div class="comp-info">
+            <div class="c-name">Frenos</div>
+            <div class="c-model">Hidráulicos Shimano MT200</div>
+            <div class="c-status good">● Bueno</div>
+          </div>
+          <div class="comp-right">
+            <div class="c-time">Hace 2 meses</div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <!-- Transmisión -->
+        <div class="comp-item">
+          <div class="comp-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          </div>
+          <div class="comp-info">
+            <div class="c-name">Transmisión</div>
+            <div class="c-model">Shimano Deore 1x12</div>
+            <div class="c-status good">● Excelente</div>
+          </div>
+          <div class="comp-right">
+            <div class="c-time">Hace 1 mes</div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <!-- Suspensión -->
+        <div class="comp-item">
+          <div class="comp-icon" style="background: rgba(239,68,68,0.12); border: 1px solid var(--red);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="comp-info">
+            <div class="c-name">Suspensión</div>
+            <div class="c-model">RockShox Judy Silver</div>
+            <div class="c-status warning">● Necesita servicio</div>
+          </div>
+          <div class="comp-right">
+            <div class="c-time">Hace 6 meses</div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <!-- Cadena -->
+        <div class="comp-item">
+          <div class="comp-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="8" width="6" height="8" rx="2"/><rect x="16" y="8" width="6" height="8" rx="2"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          </div>
+          <div class="comp-info">
+            <div class="c-name">Cadena</div>
+            <div class="c-model">KMC X12</div>
+            <div class="c-status good">● Bueno</div>
+          </div>
+          <div class="comp-right">
+            <div class="c-time">Hace 3 semanas</div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+ 
+      <div style="margin-top:20px; padding-top:16px; border-top: 1px solid var(--border);">
+        <div class="section-title">Historial de mantenimiento</div>
+        <p style="font-size:12px; color: var(--gray); text-align:center; padding: 20px 0; opacity:0.6;">Desliza para ver el historial completo</p>
+      </div>
+    </div>
+ 
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="goTo('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button class="nav-item active" onclick="goTo('garage')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
+        <span>Garaje</span>
+      </button>
+      <button class="nav-item" onclick="goTo('reservas')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Reservas</span>
+      </button>
+      <button class="nav-item" onclick="goTo('presupuesto')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Presupuesto</span>
+      </button>
+    </nav>
+  </div>
+ 
+  <!-- ===================== RESERVAS SCREEN ===================== -->
+  <div class="screen" id="screen-reservas">
+    <div class="top-header">
+      <div class="logo-box-sm">
+        <svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="10" stroke="#3399FF" stroke-width="3" fill="none"/><circle cx="30" cy="30" r="4" fill="#3399FF"/><rect x="28" y="12" width="4" height="8" rx="1" fill="#3399FF"/><rect x="28" y="40" width="4" height="8" rx="1" fill="#3399FF"/><rect x="12" y="28" width="8" height="4" rx="1" fill="#3399FF"/><rect x="40" y="28" width="8" height="4" rx="1" fill="#3399FF"/><circle cx="18" cy="37" r="5" stroke="#3399FF" stroke-width="2" fill="none"/><circle cx="42" cy="37" r="5" stroke="#3399FF" stroke-width="2" fill="none"/><line x1="23" y1="37" x2="30" y2="27" stroke="#3399FF" stroke-width="2"/><line x1="30" y1="27" x2="37" y2="37" stroke="#3399FF" stroke-width="2"/><line x1="30" y1="27" x2="30" y2="22" stroke="#3399FF" stroke-width="2"/><line x1="27" y1="22" x2="33" y2="22" stroke="#3399FF" stroke-width="2"/></svg>
+      </div>
+      <div class="header-text">
+        <div class="name">YENAIAL</div>
+        <div class="sub">Taller de Bicicletas</div>
+      </div>
+    </div>
+ 
+    <div class="scroll-content">
+      <div class="page-title">
+        <h2>Reservar turno</h2>
+        <p>Selecciona fecha y horario</p>
+      </div>
+ 
+      <div class="calendar-card">
+        <div class="cal-header">
+          <button class="cal-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <span class="month">Junio 2026</span>
+          <button class="cal-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+        <div class="cal-days-header">
+          <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+ 
+      <div class="time-section">
+        <div class="section-title">Horario disponible</div>
+        <div class="time-grid" id="time-grid">
+          <button class="time-btn" onclick="selectTime(this, '09:00')">09:00</button>
+          <button class="time-btn selected" onclick="selectTime(this, '10:00')">10:00</button>
+          <button class="time-btn" onclick="selectTime(this, '11:00')">11:00</button>
+          <button class="time-btn" onclick="selectTime(this, '14:00')">14:00</button>
+          <button class="time-btn" onclick="selectTime(this, '15:00')">15:00</button>
+          <button class="time-btn" onclick="selectTime(this, '16:00')">16:00</button>
+          <button class="time-btn" onclick="selectTime(this, '17:00')">17:00</button>
+        </div>
+      </div>
+ 
+      <div class="summary-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <div>
+          <div class="s-label">Turno seleccionado</div>
+          <div class="s-value" id="selected-summary">15 de Junio, 2026 - 10:00 hs</div>
+        </div>
+      </div>
+ 
+      <button class="btn-confirm" onclick="confirmReservation()">Confirmar reserva</button>
+    </div>
+ 
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="goTo('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button class="nav-item" onclick="goTo('garage')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
+        <span>Garaje</span>
+      </button>
+      <button class="nav-item active" onclick="goTo('reservas')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Reservas</span>
+      </button>
+      <button class="nav-item" onclick="goTo('presupuesto')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Presupuesto</span>
+      </button>
+    </nav>
+  </div>
+ 
+  <!-- ===================== PRESUPUESTO SCREEN ===================== -->
+  <div class="screen" id="screen-presupuesto">
+    <div class="top-header">
+      <div class="logo-box-sm">
+        <svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="10" stroke="#3399FF" stroke-width="3" fill="none"/><circle cx="30" cy="30" r="4" fill="#3399FF"/><rect x="28" y="12" width="4" height="8" rx="1" fill="#3399FF"/><rect x="28" y="40" width="4" height="8" rx="1" fill="#3399FF"/><rect x="12" y="28" width="8" height="4" rx="1" fill="#3399FF"/><rect x="40" y="28" width="8" height="4" rx="1" fill="#3399FF"/><circle cx="18" cy="37" r="5" stroke="#3399FF" stroke-width="2" fill="none"/><circle cx="42" cy="37" r="5" stroke="#3399FF" stroke-width="2" fill="none"/><line x1="23" y1="37" x2="30" y2="27" stroke="#3399FF" stroke-width="2"/><line x1="30" y1="27" x2="37" y2="37" stroke="#3399FF" stroke-width="2"/><line x1="30" y1="27" x2="30" y2="22" stroke="#3399FF" stroke-width="2"/><line x1="27" y1="22" x2="33" y2="22" stroke="#3399FF" stroke-width="2"/></svg>
+      </div>
+      <div class="header-text">
+        <div class="name">YENAIAL</div>
+        <div class="sub">Taller de Bicicletas</div>
+      </div>
+    </div>
+ 
+    <div class="scroll-content">
+      <div class="page-title">
+        <h2>Presupuesto</h2>
+        <p>Detalle de servicios y costos</p>
+      </div>
+ 
+      <!-- Ref card -->
+      <div class="budget-ref-card">
+        <div class="budget-doc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="budget-ref-info">
+          <div class="ref-num">#BP-2026-0342</div>
+          <div class="ref-date">4 de Junio, 2026</div>
+        </div>
+      </div>
+ 
+      <!-- Meta -->
+      <div class="budget-meta">
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <div>
+            <div class="m-label">Mecánico</div>
+            <div class="m-value">Carlos Rodriguez</div>
+          </div>
+        </div>
+        <div class="meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div>
+            <div class="m-label">Tiempo estimado</div>
+            <div class="m-value">2-3 horas</div>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Services table -->
+      <div class="section-title">Detalle de servicios</div>
+      <div class="services-table">
+        <div class="table-head">
+          <span>Servicio</span>
+          <span>M.O.</span>
+          <span>Rep.</span>
+          <span>Total</span>
+        </div>
+        <div class="table-row">
+          <div class="row-service">
+            <div class="rs-name">Pastillas de freno</div>
+            <div class="rs-sub">Shimano</div>
+          </div>
+          <div class="row-num">$15</div>
+          <div class="row-num">$35</div>
+          <div class="row-total">$50</div>
+        </div>
+        <div class="table-row">
+          <div class="row-service">
+            <div class="rs-name">Ajuste de cambios</div>
+          </div>
+          <div class="row-num">$20</div>
+          <div class="row-num" style="color:var(--gray2)">—</div>
+          <div class="row-total">$20</div>
+        </div>
+        <div class="table-row">
+          <div class="row-service">
+            <div class="rs-name">Cambio de cables</div>
+          </div>
+          <div class="row-num">$15</div>
+          <div class="row-num">$12</div>
+          <div class="row-total">$27</div>
+        </div>
+        <div class="table-row">
+          <div class="row-service">
+            <div class="rs-name">Lubricación general</div>
+          </div>
+          <div class="row-num">$10</div>
+          <div class="row-num">$8</div>
+          <div class="row-total">$18</div>
+        </div>
+        <div class="table-total">
+          <span class="total-label">Total</span>
+          <span></span>
+          <span></span>
+          <span class="total-val">$115</span>
+        </div>
+      </div>
+ 
+      <!-- Previous budgets -->
+      <div class="prev-budgets">
+        <div class="section-title">Presupuestos anteriores</div>
+        <div class="prev-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div class="prev-info">
+            <div class="p-num">#BP-2026-0257</div>
+            <div class="p-date">15 Mayo, 2026</div>
+          </div>
+          <div class="prev-amount">$84</div>
+        </div>
+        <div class="prev-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div class="prev-info">
+            <div class="p-num">#BP-2026-0198</div>
+            <div class="p-date">3 Abril, 2026</div>
+          </div>
+          <div class="prev-amount">$41</div>
+        </div>
+      </div>
+ 
+      <button class="btn-confirm" onclick="showToast('✓ Presupuesto aceptado correctamente')">Aceptar presupuesto</button>
+    </div>
+ 
+    <nav class="bottom-nav">
+      <button class="nav-item" onclick="goTo('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button class="nav-item" onclick="goTo('garage')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
+        <span>Garaje</span>
+      </button>
+      <button class="nav-item" onclick="goTo('reservas')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Reservas</span>
+      </button>
+      <button class="nav-item active" onclick="goTo('presupuesto')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Presupuesto</span>
+      </button>
+    </nav>
+  </div>
+ 
+</div>
+ 
+<script>
+  // Navigation
+  const screenMap = {
+    'login': 'screen-login',
+    'dashboard': 'screen-dashboard',
+    'garage': 'screen-garage',
+    'reservas': 'screen-reservas',
+    'presupuesto': 'screen-presupuesto'
+  };
+ 
+  function goTo(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById(screenMap[name]);
+    if (target) target.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+ 
+  // Password toggle
+  function togglePass() {
+    const inp = document.getElementById('inp-pass');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+ 
+  // Toast
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+ 
+  // Calendar
+  const selectedDay = { day: 15, time: '10:00' };
+  const availableDays = [1,2,3,4,5,6,7,8,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+  const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+ 
+  function buildCalendar() {
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    // June 2026 starts on Monday
+    const firstDay = 1; // Monday = 0 offset
+    const totalDays = 30;
+ 
+    for (let i = 0; i < firstDay; i++) {
+      const empty = document.createElement('div');
+      empty.className = 'cal-day empty';
+      grid.appendChild(empty);
+    }
+ 
+    for (let d = 1; d <= totalDays; d++) {
+      const day = document.createElement('div');
+      const isAvailable = availableDays.includes(d);
+      const isSelected = d === selectedDay.day;
+      day.className = 'cal-day' + (isAvailable ? ' available' : '') + (isSelected ? ' selected' : '');
+      day.textContent = d;
+      if (isAvailable) {
+        day.onclick = () => selectDay(d, day);
+      }
+      grid.appendChild(day);
+    }
+  }
+ 
+  function selectDay(d, el) {
+    document.querySelectorAll('.cal-day').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedDay.day = d;
+    updateSummary();
+  }
+ 
+  function selectTime(btn, time) {
+    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedDay.time = time;
+    updateSummary();
+  }
+ 
+  function updateSummary() {
+    const dayNames = ['','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'];
+    document.getElementById('selected-summary').textContent =
+      `${selectedDay.day} de Junio, 2026 - ${selectedDay.time} hs`;
+  }
+ 
+  function confirmReservation() {
+    showToast(`✓ Turno confirmado: ${selectedDay.day} Junio, ${selectedDay.time} hs`);
+  }
+ 
+  // Init
+  buildCalendar();
+</script>
+</body>
+</html>
