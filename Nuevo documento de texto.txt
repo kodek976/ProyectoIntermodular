@@ -1,0 +1,17 @@
+CREATE TABLE usuarios (
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    nombre      VARCHAR(50)  NOT NULL,
+    rol         ENUM('admin', 'cliente') NOT NULL,
+    password_hash VARCHAR(255) NOT NULL  -- Aquí va el hash, nunca la contraseña real
+);
+INSERT INTO usuarios (nombre, rol, password_hash) VALUES
+(
+  'admin',
+  'admin',
+  '$2b$12$0c4jreZQ5ckiz8qMv8d/He5KKXsO65VIZhs.EkEV/90d4zgRdx2NG'   
+),
+(
+  'cliente',
+  'cliente',
+  '$2b$12$EKC9OYQXwpXvRUo5LdEDYeaQXYgr.va3B9vK52F2MeeHuYCj9l5k6' 
+);
