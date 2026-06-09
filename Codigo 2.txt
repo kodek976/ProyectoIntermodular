@@ -1,45 +1,30 @@
-Actúa como un desarrollador experto en HTML y CSS. Necesito que crees la estructura y los estilos para una plataforma de gestión de bicicletas. Restricción estricta: No uses JavaScript ni backend (PHP/Node). Todo debe ser funcional mediante el uso de etiquetas de formularios, radio buttons, checkboxes y pseudoclases CSS (:checked, :target) para simular la interactividad.
+1. Sistema de Login
+Validación estricta: Crearemos un objeto usuariosRegistrados en localStorage. Si el input del usuario no coincide con la base de datos, el script impedirá el acceso y mostrará un mensaje de error ("Usuario no registrado").
 
-1. Sistema de Autenticación (Simulado)
-Crea una página de Inicio de Sesión que redirija a la página principal solo si el usuario está registrado.
+Gestión de sesión: Al iniciar sesión correctamente, guardaremos un token (o simplemente el nombre de usuario) en sessionStorage. Esto nos permitirá mantener al usuario dentro de la app sin que tenga que loguearse constantemente.
 
-Implementa una validación visual: el acceso al dashboard solo será posible si se cumplen los estados de autenticación (puedes usar un checkbox oculto que simule el estado "logueado").
+2. Inicio (Dashboard)
+Persistencia de estado: Usaremos una función renderDashboard() que comprueba si existe una bicicleta en localStorage. Si data.bike es null, todos los contenedores permanecerán vacíos.
 
-2. Dashboard - INICIO
-Perfil: Crea un menú desplegable (usando <details> y <summary> o radio buttons) en la foto de perfil que incluya un botón de "Cerrar sesión".
+Simulación de tiempos (Progreso): Implementaremos un sistema de ticks con setInterval que aumente progresivamente una variable desgaste o tiempoUso de cada componente. Esto dará la sensación de que la información se rellena sola con el tiempo (por ejemplo, actualizando una barra de progreso cada 5 segundos).
 
-Estado Actual: Estructura: Crea un contenedor de barra de progreso (.progress-bar) que contenga un elemento hijo (.progress-fill).
+Cierre de sesión: El botón de cerrar sesión simplemente ejecutará sessionStorage.clear() y recargará la ventana para redirigir automáticamente al Login.
 
-Estado Inicial: Por defecto, .progress-fill tendrá un ancho de 0% y un color transparente.
+3. Garaje
+Ficha vacía por defecto: El componente de Garaje mostrará un formulario (<form>) por defecto. Solo cuando el usuario envíe el formulario se generará el objeto miBicicleta en localStorage.
 
-Comportamiento (La Reserva): Utiliza un checkbox oculto o una clase .reserva-activa. Cuando este esté activo, se disparará una animación CSS de larga duración (ej. animation: fill 30s linear forwards).
+Generación automática: Una vez enviada la información (ej. modelo de bici), un script generará un array de componentes (cadena, frenos, neumáticos) con valores de estado iniciales.
 
-Estilo: La barra solo empezará a rellenarse cuando la clase de reserva esté activa. Durante la animación, el "tick" o icono de completado debe permanecer oculto (opacity: 0) y solo mostrarse (opacity: 1) cuando la animación de la barra llegue al 100%.
+Edición: Cada componente tendrá un botón "Editar" que habilita un campo input sobre ese elemento específico, permitiendo sobrescribir los datos generados automáticamente si el usuario detecta un error.
 
-Feedback Visual: Asegúrate de que no haya ninguna barra rellena antes de activar la reserva.
+4. Asistente (Chat)
+Interacción: Crearemos un contenedor de chat con una ventana de historial y un input de texto.
 
-Sección Próximo Servicio/Alertas: Diseña contenedores vacíos con un texto de placeholder ("Añade tu modelo para ver alertas") que solo desaparezcan/se rellenen cuando el usuario haya seleccionado o escrito la marca/modelo de su bicicleta.
+Lógica de respuesta: Usaremos un switch o if/else en JavaScript que analice el contenido del mensaje. Por ejemplo:
 
-3. Dashboard - GARAJE
-Ficha Técnica: Crea un formulario vacío donde los campos (<input>) no tengan valores predeterminados. El diseño debe enfatizar que es un campo "Editable" una vez que el usuario haga clic.
+Si incluye "freno": El bot responde con consejos de mantenimiento de frenos.
 
-Componentes: * La lista de componentes debe estar vacía por defecto.
+Si incluye "hola": El bot devuelve un saludo.
 
-Diseña una estructura lógica donde, al rellenar el campo "Marca/Modelo", los componentes se muestren mediante selectores CSS hermanos (+ o ~).
-
-Elimina los elementos de navegación (flechas ">" o desplegables) hasta que el componente esté activo.
-
-4. ASISTENTE (Chat)
-Diseña una interfaz de chat fija en la esquina inferior derecha.
-
-Dado que no usaremos JS, utiliza un campo de entrada (<input type="text">) y un área de mensajes donde el usuario pueda escribir.
-
-Para la "respuesta", crea una serie de etiquetas <label> o bloques ocultos que se muestren al hacer clic en un botón de "Enviar", simulando una respuesta predefinida.
-
-Requisitos Técnicos:
-Utiliza CSS Grid y Flexbox para el layout.
-
-Asegúrate de que la transición entre estados (visto/no visto) sea fluida usando transiciones CSS (transition).
-
-Mantén un diseño limpio, moderno y minimalista.
+Por defecto: "No entiendo tu consulta, ¿necesitas ayuda con tu bicicleta?".
 
