@@ -95,3 +95,20 @@
         if (e.key === 'Enter') enviarPregunta();
     });
 </script>
+
+
+div class="chat-container">
+    <div class="chat-header">
+        <h2>Taller Yenaial</h2>
+        <p>Yenaial Bot 🛠️</p>
+    </div>
+    
+    <div id="chatBox" class="chat-box">
+        <div class="msg ai-msg">¡Hola! Soy <b>Yenaial Bot</b>, el asistente técnico de BiciFix. ¿Qué le ocurre a tu bicicleta? Puedo darte un presupuesto aproximado o ayudarte a buscar piezas en Amazon si prefieres cambiarlas tú mismo.</div>
+    </div>
+    
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Pregúntame por una reparación o presupuesto...">
+        <button id="sendBtn">Enviar</button>
+    </div>
+</div>
