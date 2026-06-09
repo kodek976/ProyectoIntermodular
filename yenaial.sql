@@ -1,130 +1,59 @@
-CREATE DATABASE yenaial;
-USE yenaial;
+-- 1. Crear y seleccionar la base de datos
+CREATE DATABASE IF NOT EXISTS bicitaller_db;
+USE bicitaller_db;
 
-
--- TABLA CLIENTE
-
-CREATE TABLE cliente (
-    dniCli      VARCHAR(10)  NOT NULL,
-    nombre      VARCHAR(30)  NOT NULL,
-    apellidos        VARCHAR(30)  NOT NULL,
-    telefono    VARCHAR(15)  NULL,
-    correo      VARCHAR(80)  NOT NULL,
-    fecha_registro      DATETIME,
-    PRIMARY KEY (dniCli)
+-- 2. Tabla: Usuarios (Fusión de Clientes + Datos de Login)
+CREATE TABLE IF NOT EXISTS usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    telefono VARCHAR(20),
+    rol ENUM('admin', 'cliente') NOT NULL DEFAULT 'cliente',
+    password_hash VARCHAR(255) NOT NULL
 );
 
-
--- TABLA BICICLETAS
-CREATE TABLE bicicleta (
-    id_bicicleta      VARCHAR(10)  NOT NULL,
-    marca      VARCHAR(30)  NOT NULL,
-    modelo        VARCHAR(30)  NOT NULL,
-    tipo    VARCHAR(15)  NULL,
-    color      VARCHAR(80)  NULL,
-    numero_serie      VARCHAR(50),
-    notas_tecnicas	VARCHAR(50) NULL,
-    PRIMARY KEY (id_bicicleta)
+-- 3. Tabla: Bicicletas
+CREATE TABLE IF NOT EXISTS bicicletas (
+    id_bicicleta INT AUTO_INCREMENT PRIMARY KEY,
+    marca VARCHAR(50) NOT NULL,
+    modelo VARCHAR(50) NOT NULL,
+    id_usuario INT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
 );
 
--- TABLA RESERVAS
-
-CREATE TABLE reservas (
-    id_reservas      VARCHAR(10)  NOT NULL,
-    fecha_hora      DATETIME,
-    motivo_consulta        VARCHAR(30)  NOT NULL,
-    estado_reserva    VARCHAR(15)  NOT NULL,
-    PRIMARY KEY (id_reservas)
+-- 4. Tabla: Componentes
+CREATE TABLE IF NOT EXISTS componentes (
+    id_componente INT AUTO_INCREMENT PRIMARY KEY,
+    tipo VARCHAR(50) NOT NULL,
+    marca_modelo VARCHAR(100) NOT NULL,
+    estado_salud VARCHAR(30) NOT NULL,
+    necesita_cambio BOOLEAN NOT NULL DEFAULT FALSE,
+    id_bicicleta INT NOT NULL,
+    FOREIGN KEY (id_bicicleta) REFERENCES bicicletas(id_bicicleta) ON DELETE CASCADE
 );
 
-
--- TABLA PIEZAS
-
-CREATE TABLE piezas (
-    id_piezas      VARCHAR(10)  NOT NULL,
-    nombre      VARCHAR(30)  NOT NULL,
-    categoría        VARCHAR(30)  NOT NULL,
-    precio_costo    DECIMAL(10,2)  NOT NULL,
-    precio_venta      DECIMAL(10,2)  NOT NULL,
-    stock_actual      INT  NOT NULL,
-    stock_minimo	INT NOT NULL,
-    PRIMARY KEY (id_piezas)
+-- 5. Tabla: Citas
+CREATE TABLE IF NOT EXISTS citas (
+    id_cita INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_bicicleta INT NOT NULL,
+    fecha_hora DATETIME NOT NULL,
+    motivo VARCHAR(255),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_bicicleta) REFERENCES bicicletas(id_bicicleta) ON DELETE CASCADE
 );
 
--- TABLA REPARACIONES
-
-CREATE TABLE reparaciones (
-    id_reparaciones      VARCHAR(10)  NOT NULL,
-    fecha_entrada      DATETIME  NOT NULL,
-    descripcion_problema        VARCHAR(30)  NOT NULL,
-    diagnostico_mecanico    VARCHAR(15)  NULL,
-    estado      VARCHAR(80)  NOT NULL,
-    costo_actual      DECIMAL(10,2)  NOT NULL,
-    fecha_entrega	DATETIME NULL,
-    PRIMARY KEY (id_reparaciones)
+-- 6. Tabla: Reparaciones
+CREATE TABLE IF NOT EXISTS reparaciones (
+    id_reparacion INT AUTO_INCREMENT PRIMARY KEY,
+    id_bicicleta INT NOT NULL,
+    descripcion_trabajo TEXT,
+    fecha DATE NOT NULL,
+    estado_progreso ENUM('EN_DIAGNOSTICO', 'EN_REPARACION', 'LISTA_PARA_PRUEBA', 'LISTA_PARA_RETIRAR') NOT NULL DEFAULT 'EN_DIAGNOSTICO',
+    FOREIGN KEY (id_bicicleta) REFERENCES bicicletas(id_bicicleta) ON DELETE CASCADE
 );
 
--- Tabla reparacion piezas
-
-CREATE TABLE reparacion_piezas (
-    id_reparacion VARCHAR(10) NOT NULL,
-    id_pieza VARCHAR(10) NOT NULL,
-    cantidad INT NOT NULL DEFAULT 1,
-    PRIMARY KEY (id_reparacion, id_pieza),
-    CONSTRAINT fk_det_reparacion FOREIGN KEY (id_reparacion) REFERENCES reparaciones(id_reparaciones),
-    CONSTRAINT fk_det_pieza FOREIGN KEY (id_pieza) REFERENCES piezas(id_piezas)
-);
-
--- TABLA TÉCNICOS
-
-CREATE TABLE tecnico (
-    id_tecnico      VARCHAR(10)  NOT NULL,
-    nombre      VARCHAR(30)  NOT NULL,
-    apellidos        VARCHAR(30)  NOT NULL,
-    telefono    VARCHAR(15)  NULL,
-    especialidad      VARCHAR(80)  NULL,
-    estado_laboral      VARCHAR(20)  NOT NULL,
-    PRIMARY KEY (id_tecnico)
-);
-
-ALTER TABLE bicicleta
-	ADD	bicicleta_cliente VARCHAR(10)  NOT NULL;
-    
-ALTER TABLE bicicleta
-	ADD CONSTRAINT fk_bicicleta_cliente
-    FOREIGN KEY (bicicleta_cliente) REFERENCES cliente(dniCli);
-
-ALTER TABLE reservas
-	ADD dni_reservas VARCHAR(10)  NOT NULL;
-
-ALTER TABLE reservas
-	ADD reservas_bicicleta VARCHAR(10)  NOT NULL;
-    
-ALTER TABLE reservas
-	ADD CONSTRAINT fk_reservas_cliente
-    FOREIGN KEY (dni_reservas) REFERENCES cliente(dniCli),
-    ADD CONSTRAINT fk_reservas_bicicleta
-    FOREIGN KEY (reservas_bicicleta) REFERENCES bicicleta(id_bicicleta);
-    
-ALTER TABLE reparaciones
-	ADD reparaciones_bicicleta VARCHAR(10)  NOT NULL;
-
-ALTER TABLE reparaciones
-	ADD reparaciones_tecnico VARCHAR(10)  NOT NULL;
-    
-ALTER TABLE reparaciones
-	ADD reparaciones_piezas VARCHAR(10)  NOT NULL;   
-
-ALTER TABLE reparaciones
-    ADD CONSTRAINT fk_reparaciones_bicicleta
-    FOREIGN KEY (reparaciones_bicicleta) REFERENCES bicicleta(id_bicicleta),
-    ADD CONSTRAINT fk_reparaciones_tecnico
-    FOREIGN KEY (reparaciones_tecnico) REFERENCES tecnico(id_tecnico),
-    ADD CONSTRAINT fk_reparaciones_piezas
-    FOREIGN KEY (reparaciones_piezas) REFERENCES piezas(id_piezas);
-    
-    
-ALTER TABLE reservas DROP CONSTRAINT fk_reservas_cliente;
-ALTER TABLE reservas DROP CONSTRAINT fk_reservas_bicicleta;
-ALTER TABLE reparaciones DROP CONSTRAINT fk_reparaciones_bicicleta;
-ALTER TABLE reparaciones DROP CONSTRAINT fk_reparaciones_tecnico;
+-- 7. Inserción del usuario por defecto (Login: alumno@dam.es / Contraseña: usa la que tenías para 'cliente')
+INSERT INTO usuarios (nombre, email, telefono, rol, password_hash) 
+VALUES ('Alumno DAM', 'alumno@dam.es', '600000000', 'cliente', 
+'$2b$12$EKC9OYQXwpXvRUo5LdEDYeaQXYgr.va3B9vK52F2MeeHuYCj9l5k6');
