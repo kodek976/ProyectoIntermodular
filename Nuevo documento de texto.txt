@@ -1,0 +1,1 @@
+echo "HOST (IP Pública): $(curl -s https://amazonaws.com)" && echo "PUERTO:" && sudo mysql -u root -e "SHOW VARIABLES LIKE 'port';"
