@@ -1,0 +1,45 @@
+Actúa como un desarrollador experto en HTML y CSS. Necesito que crees la estructura y los estilos para una plataforma de gestión de bicicletas. Restricción estricta: No uses JavaScript ni backend (PHP/Node). Todo debe ser funcional mediante el uso de etiquetas de formularios, radio buttons, checkboxes y pseudoclases CSS (:checked, :target) para simular la interactividad.
+
+1. Sistema de Autenticación (Simulado)
+Crea una página de Inicio de Sesión que redirija a la página principal solo si el usuario está registrado.
+
+Implementa una validación visual: el acceso al dashboard solo será posible si se cumplen los estados de autenticación (puedes usar un checkbox oculto que simule el estado "logueado").
+
+2. Dashboard - INICIO
+Perfil: Crea un menú desplegable (usando <details> y <summary> o radio buttons) en la foto de perfil que incluya un botón de "Cerrar sesión".
+
+Estado Actual: Estructura: Crea un contenedor de barra de progreso (.progress-bar) que contenga un elemento hijo (.progress-fill).
+
+Estado Inicial: Por defecto, .progress-fill tendrá un ancho de 0% y un color transparente.
+
+Comportamiento (La Reserva): Utiliza un checkbox oculto o una clase .reserva-activa. Cuando este esté activo, se disparará una animación CSS de larga duración (ej. animation: fill 30s linear forwards).
+
+Estilo: La barra solo empezará a rellenarse cuando la clase de reserva esté activa. Durante la animación, el "tick" o icono de completado debe permanecer oculto (opacity: 0) y solo mostrarse (opacity: 1) cuando la animación de la barra llegue al 100%.
+
+Feedback Visual: Asegúrate de que no haya ninguna barra rellena antes de activar la reserva.
+
+Sección Próximo Servicio/Alertas: Diseña contenedores vacíos con un texto de placeholder ("Añade tu modelo para ver alertas") que solo desaparezcan/se rellenen cuando el usuario haya seleccionado o escrito la marca/modelo de su bicicleta.
+
+3. Dashboard - GARAJE
+Ficha Técnica: Crea un formulario vacío donde los campos (<input>) no tengan valores predeterminados. El diseño debe enfatizar que es un campo "Editable" una vez que el usuario haga clic.
+
+Componentes: * La lista de componentes debe estar vacía por defecto.
+
+Diseña una estructura lógica donde, al rellenar el campo "Marca/Modelo", los componentes se muestren mediante selectores CSS hermanos (+ o ~).
+
+Elimina los elementos de navegación (flechas ">" o desplegables) hasta que el componente esté activo.
+
+4. ASISTENTE (Chat)
+Diseña una interfaz de chat fija en la esquina inferior derecha.
+
+Dado que no usaremos JS, utiliza un campo de entrada (<input type="text">) y un área de mensajes donde el usuario pueda escribir.
+
+Para la "respuesta", crea una serie de etiquetas <label> o bloques ocultos que se muestren al hacer clic en un botón de "Enviar", simulando una respuesta predefinida.
+
+Requisitos Técnicos:
+Utiliza CSS Grid y Flexbox para el layout.
+
+Asegúrate de que la transición entre estados (visto/no visto) sea fluida usando transiciones CSS (transition).
+
+Mantén un diseño limpio, moderno y minimalista.
+
