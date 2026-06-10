@@ -1,19 +1,18 @@
 -- 1. Crear y seleccionar la base de datos
-CREATE DATABASE IF NOT EXISTS bicitaller_db;
-USE bicitaller_db;
+CREATE DATABASE IF NOT EXISTS yenaial_db;
+USE yenaial_db;
 
 -- 2. Tabla: Usuarios (Fusión de Clientes + Datos de Login)
-CREATE TABLE IF NOT EXISTS usuarios (
+CREATE TABLE usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    telefono VARCHAR(20),
+    email VARCHAR(100) NOT NULL UNIQUE,,
     rol ENUM('admin', 'cliente') NOT NULL DEFAULT 'cliente',
     password_hash VARCHAR(255) NOT NULL
 );
 
 -- 3. Tabla: Bicicletas
-CREATE TABLE IF NOT EXISTS bicicletas (
+CREATE TABLE bicicletas (
     id_bicicleta INT AUTO_INCREMENT PRIMARY KEY,
     marca VARCHAR(50) NOT NULL,
     modelo VARCHAR(50) NOT NULL,
@@ -22,7 +21,7 @@ CREATE TABLE IF NOT EXISTS bicicletas (
 );
 
 -- 4. Tabla: Componentes
-CREATE TABLE IF NOT EXISTS componentes (
+CREATE TABLE componentes (
     id_componente INT AUTO_INCREMENT PRIMARY KEY,
     tipo VARCHAR(50) NOT NULL,
     marca_modelo VARCHAR(100) NOT NULL,
@@ -33,18 +32,17 @@ CREATE TABLE IF NOT EXISTS componentes (
 );
 
 -- 5. Tabla: Citas
-CREATE TABLE IF NOT EXISTS citas (
+CREATE TABLE citas (
     id_cita INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
     id_bicicleta INT NOT NULL,
-    fecha_hora DATETIME NOT NULL,
-    motivo VARCHAR(255),
+    fecha_hora DATETIME NOT NULL,),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
     FOREIGN KEY (id_bicicleta) REFERENCES bicicletas(id_bicicleta) ON DELETE CASCADE
 );
 
 -- 6. Tabla: Reparaciones
-CREATE TABLE IF NOT EXISTS reparaciones (
+CREATE TABLE reparaciones (
     id_reparacion INT AUTO_INCREMENT PRIMARY KEY,
     id_bicicleta INT NOT NULL,
     descripcion_trabajo TEXT,
