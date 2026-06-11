@@ -1,0 +1,37 @@
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+public class Main extends Application {
+    private Stage primaryStage;
+    @Override
+    public void start(Stage stage) {
+        this.primaryStage = stage;
+        stage.setTitle("YENAIAL - Taller de Bicicletas");
+        stage.setResizable(false);
+        showLogin();
+        stage.show();
+    }
+    public void showLogin() {
+        LoginView view = new LoginView(this);
+        primaryStage.setScene(new Scene(view.getRoot(), 900, 620));
+    }
+    public void showDashboard() {
+        DashboardView view = new DashboardView(this);
+        primaryStage.setScene(new Scene(view.getRoot(), 900, 620));
+    }
+    public void showGaraje() {
+        GarajeView view = new GarajeView(this);
+        primaryStage.setScene(new Scene(view.getRoot(), 900, 620));
+    }
+    public void showReservas() {
+        ReservasView view = new ReservasView(this);
+        primaryStage.setScene(new Scene(view.getRoot(), 900, 620));
+    }
+    public void showAsistente() {
+        AsistenteView view = new AsistenteView(this);
+        primaryStage.setScene(new Scene(view.getRoot(), 900, 620));
+    }
+    public static void main(String[] args) {
+        launch(args);
+    }
+}

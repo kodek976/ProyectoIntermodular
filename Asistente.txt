@@ -1,0 +1,117 @@
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.*;
+public class AsistenteView {
+    private final BorderPane root;
+    private final VBox chatArea = new VBox(12);
+    public AsistenteView(Main app) {
+        root = new BorderPane();
+        root.setStyle("-fx-background-color: " + LoginView.BG + ";");
+        root.setTop(buildTopBar());
+        root.setCenter(buildChat());
+        root.setBottom(buildInputBar());
+        // Mensaje inicial del bot
+        addBotMessage(
+            "¡Hola! Soy Yenaial Bot, el asistente técnico de BiciFix.\n" +
+            "¿Qué le ocurre a tu bicicleta? Puedo darte un presupuesto\n" +
+            "aproximado o ayudarte a buscar piezas en Amazon si\n" +
+            "prefieres cambiarlas tú mismo."
+        );
+        // Nav encima del input — lo construimos después para que el stack sea correcto
+        VBox bottom = new VBox(
+            buildInputBar(),
+            DashboardView.buildNavBar(app, "asistente")
+        );
+        root.setBottom(bottom);
+    }
+    // ── Top bar ───────────────────────────────────────────────────────────────
+    private VBox buildTopBar() {
+        Label title = DashboardView.labelBold("Taller Yenaial", 16, "#ffffff");
+        title.setAlignment(Pos.CENTER);
+        Label sub = new Label("Yenaial Bot 🔧");
+        sub.setFont(Font.font("System", 12));
+        sub.setTextFill(Color.web(LoginView.ACCENT));
+        VBox box = new VBox(2, title, sub);
+        box.setAlignment(Pos.CENTER);
+        box.setPadding(new Insets(14, 16, 14, 16));
+        box.setStyle("-fx-border-color: #222222; -fx-border-width: 0 0 1 0;");
+        return box;
+    }
+    // ── Chat area ─────────────────────────────────────────────────────────────
+    private ScrollPane buildChat() {
+        chatArea.setPadding(new Insets(16));
+        chatArea.setFillWidth(true);
+        ScrollPane sp = new ScrollPane(chatArea);
+        sp.setFitToWidth(true);
+        sp.setStyle("-fx-background: " + LoginView.BG + "; -fx-background-color: " + LoginView.BG + ";");
+        sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        // Auto-scroll al fondo
+        chatArea.heightProperty().addListener((obs, oldVal, newVal) ->
+            sp.setVvalue(1.0)
+        );
+        return sp;
+    }
+    // ── Input bar ─────────────────────────────────────────────────────────────
+    private HBox buildInputBar() {
+        TextField input = new TextField();
+        input.setPromptText("Pregúntame por una reparación o presupuesto...");
+        LoginView.styleField(input);
+        input.setPrefHeight(44);
+        HBox.setHgrow(input, Priority.ALWAYS);
+        Button send = new Button("Enviar");
+        send.setPrefHeight(44);
+        send.setPrefWidth(80);
+        send.setFont(Font.font("System", FontWeight.BOLD, 13));
+        LoginView.stylePrimaryButton(send);
+        Runnable sendAction = () -> {
+            String txt = input.getText().trim();
+            if (!txt.isEmpty()) {
+                addUserMessage(txt);
+                input.clear();
+                addBotMessage("Recibido. Estoy analizando tu consulta sobre: \"" + txt + "\".");
+            }
+        };
+        send.setOnAction(e -> sendAction.run());
+        input.setOnAction(e -> sendAction.run());
+        HBox bar = new HBox(10, input, send);
+        bar.setAlignment(Pos.CENTER);
+        bar.setPadding(new Insets(10, 16, 10, 16));
+        bar.setStyle("-fx-background-color: #111111;");
+        return bar;
+    }
+    // ── Message builders ──────────────────────────────────────────────────────
+    private void addBotMessage(String text) {
+        Label msg = new Label(text);
+        msg.setWrapText(true);
+        msg.setMaxWidth(400);
+        msg.setFont(Font.font("System", 13));
+        msg.setTextFill(Color.WHITE);
+        msg.setPadding(new Insets(12, 14, 12, 14));
+        msg.setStyle(
+            "-fx-background-color: #1e1e1e;" +
+            "-fx-background-radius: 12 12 12 0;"
+        );
+        HBox row = new HBox(msg);
+        row.setAlignment(Pos.CENTER_LEFT);
+        chatArea.getChildren().add(row);
+    }
+    private void addUserMessage(String text) {
+        Label msg = new Label(text);
+        msg.setWrapText(true);
+        msg.setMaxWidth(400);
+        msg.setFont(Font.font("System", 13));
+        msg.setTextFill(Color.WHITE);
+        msg.setPadding(new Insets(12, 14, 12, 14));
+        msg.setStyle(
+            "-fx-background-color: " + LoginView.ACCENT + ";" +
+            "-fx-background-radius: 12 12 0 12;"
+        );
+        HBox row = new HBox(msg);
+        row.setAlignment(Pos.CENTER_RIGHT);
+        chatArea.getChildren().add(row);
+    }
+    public BorderPane getRoot() { return root; }
+}

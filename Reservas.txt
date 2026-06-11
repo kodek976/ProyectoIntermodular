@@ -1,0 +1,206 @@
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.*;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.TextStyle;
+import java.util.Locale;
+import java.util.Set;
+public class ReservasView {
+    private final BorderPane root;
+    private YearMonth currentMonth;
+    private LocalDate selectedDate;
+    private final VBox calendarGrid = new VBox(4);
+    // Días disponibles (lun–vie con hueco)
+    private static final Set<Integer> AVAILABLE_DAYS = Set.of(
+        11,12,15,16,17,18,19,22,23,24,25,26,29,30
+    );
+    public ReservasView(Main app) {
+        currentMonth = YearMonth.of(2026, 6);
+        selectedDate = LocalDate.of(2026, 6, 11);
+        root = new BorderPane();
+        root.setStyle("-fx-background-color: " + LoginView.BG + ";");
+        root.setTop(buildTopBar(app));
+        root.setCenter(buildContent());
+        root.setBottom(DashboardView.buildNavBar(app, "reservas"));
+    }
+    private HBox buildTopBar(Main app) {
+        Label icon = new Label("⚙");
+        icon.setTextFill(Color.web(LoginView.ACCENT));
+        icon.setStyle("-fx-background-color: #1e3a5f; -fx-background-radius: 8; -fx-padding: 6 8;");
+        VBox brand = new VBox(0,
+            DashboardView.labelBold("YENAIAL", 13, "#ffffff"),
+            DashboardView.labelPlain("Taller de Bicicletas", 10, LoginView.TEXT_SUB)
+        );
+        Region sp = new Region();
+        HBox.setHgrow(sp, Priority.ALWAYS);
+        Button salir = DashboardView.dangerButton("SALIR");
+        salir.setOnAction(e -> app.showLogin());
+        HBox bar = new HBox(10, icon, brand, sp, salir);
+        bar.setAlignment(Pos.CENTER_LEFT);
+        bar.setPadding(new Insets(12, 16, 12, 16));
+        bar.setStyle("-fx-border-color: #222222; -fx-border-width: 0 0 1 0;");
+        return bar;
+    }
+    private ScrollPane buildContent() {
+        Label title    = DashboardView.labelBold("Reservar turno", 22, "#ffffff");
+        Label subtitle = DashboardView.labelPlain("Selecciona fecha y horario", 13, LoginView.TEXT_SUB);
+        VBox calBox = buildCalendarCard();
+        Label horariosTitle = DashboardView.labelBold("Horario disponible", 15, "#ffffff");
+        HBox horarios = buildHorarios();
+        VBox content = new VBox(14, title, subtitle, calBox, horariosTitle, horarios);
+        content.setPadding(new Insets(20, 16, 20, 16));
+        ScrollPane sp = new ScrollPane(content);
+        sp.setFitToWidth(true);
+        sp.setStyle("-fx-background: " + LoginView.BG + "; -fx-background-color: " + LoginView.BG + ";");
+        sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        return sp;
+    }
+    // ── Calendario ────────────────────────────────────────────────────────────
+    private VBox buildCalendarCard() {
+        // Header mes
+        Button prev = arrowBtn("‹");
+        Button next = arrowBtn("›");
+        Label monthLabel = new Label(getMonthLabel());
+        monthLabel.setFont(Font.font("System", FontWeight.BOLD, 14));
+        monthLabel.setTextFill(Color.WHITE);
+        Region sp1 = new Region(); HBox.setHgrow(sp1, Priority.ALWAYS);
+        Region sp2 = new Region(); HBox.setHgrow(sp2, Priority.ALWAYS);
+        HBox header = new HBox(prev, sp1, monthLabel, sp2, next);
+        header.setAlignment(Pos.CENTER);
+        prev.setOnAction(e -> {
+            currentMonth = currentMonth.minusMonths(1);
+            monthLabel.setText(getMonthLabel());
+            refreshGrid();
+        });
+        next.setOnAction(e -> {
+            currentMonth = currentMonth.plusMonths(1);
+            monthLabel.setText(getMonthLabel());
+            refreshGrid();
+        });
+        // Días de la semana
+        String[] days = {"L", "M", "X", "J", "V", "S", "D"};
+        GridPane dayNames = new GridPane();
+        dayNames.setHgap(4);
+        for (int i = 0; i < 7; i++) {
+            Label d = DashboardView.labelPlain(days[i], 11, "#666666");
+            d.setMinWidth(36);
+            d.setAlignment(Pos.CENTER);
+            dayNames.add(d, i, 0);
+        }
+        refreshGrid();
+        VBox card = new VBox(10, header, dayNames, calendarGrid);
+        card.setPadding(new Insets(16));
+        DashboardView.cardStyle(card);
+        return card;
+    }
+    private void refreshGrid() {
+        calendarGrid.getChildren().clear();
+        LocalDate first = currentMonth.atDay(1);
+        int startDow = first.getDayOfWeek().getValue() - 1; // 0=Lun
+        int daysInMonth = currentMonth.lengthOfMonth();
+        GridPane grid = new GridPane();
+        grid.setHgap(4);
+        grid.setVgap(8);
+        int col = startDow;
+        int row = 0;
+        for (int day = 1; day <= daysInMonth; day++) {
+            LocalDate date = currentMonth.atDay(day);
+            boolean available = AVAILABLE_DAYS.contains(day);
+            boolean sel       = date.equals(selectedDate);
+            Label cell = new Label(String.valueOf(day));
+            cell.setMinSize(36, 36);
+            cell.setAlignment(Pos.CENTER);
+            cell.setFont(Font.font("System", FontWeight.BOLD, 12));
+            if (sel) {
+                cell.setTextFill(Color.WHITE);
+                cell.setStyle(
+                    "-fx-background-color: " + LoginView.ACCENT + ";" +
+                    "-fx-background-radius: 18;"
+                );
+            } else if (available) {
+                cell.setTextFill(Color.WHITE);
+                cell.setStyle(
+                    "-fx-border-color: " + LoginView.ACCENT + ";" +
+                    "-fx-border-radius: 18;" +
+                    "-fx-cursor: hand;"
+                );
+                final int d = day;
+                cell.setOnMouseClicked(e -> {
+                    selectedDate = currentMonth.atDay(d);
+                    refreshGrid();
+                });
+            } else {
+                cell.setTextFill(Color.web("#444444"));
+            }
+            grid.add(cell, col, row);
+            col++;
+            if (col == 7) { col = 0; row++; }
+        }
+        calendarGrid.getChildren().add(grid);
+    }
+    // ── Horarios ──────────────────────────────────────────────────────────────
+    private HBox buildHorarios() {
+        String[] slots = {"09:00", "10:00", "11:00"};
+        HBox row = new HBox(10);
+        for (String slot : slots) {
+            Button btn = new Button(slot);
+            btn.setPrefHeight(42);
+            HBox.setHgrow(btn, Priority.ALWAYS);
+            btn.setMaxWidth(Double.MAX_VALUE);
+            btn.setFont(Font.font("System", FontWeight.BOLD, 13));
+            boolean active = slot.equals("10:00");
+            applySlotStyle(btn, active);
+            btn.setOnAction(e -> {
+                row.getChildren().forEach(n -> applySlotStyle((Button) n, false));
+                applySlotStyle(btn, true);
+            });
+            row.getChildren().add(btn);
+        }
+        return row;
+    }
+    private void applySlotStyle(Button b, boolean active) {
+        if (active) {
+            b.setStyle(
+                "-fx-background-color: " + LoginView.ACCENT + ";" +
+                "-fx-text-fill: white;" +
+                "-fx-background-radius: 8;" +
+                "-fx-cursor: hand;"
+            );
+        } else {
+            b.setStyle(
+                "-fx-background-color: #1e1e1e;" +
+                "-fx-text-fill: white;" +
+                "-fx-border-color: #333333;" +
+                "-fx-border-radius: 8;" +
+                "-fx-background-radius: 8;" +
+                "-fx-cursor: hand;"
+            );
+        }
+    }
+    private String getMonthLabel() {
+        String m = currentMonth.getMonth()
+            .getDisplayName(TextStyle.FULL, new Locale("es"))
+            .substring(0, 1).toUpperCase()
+            + currentMonth.getMonth()
+                .getDisplayName(TextStyle.FULL, new Locale("es"))
+                .substring(1);
+        return m + " " + currentMonth.getYear();
+    }
+    private Button arrowBtn(String text) {
+        Button b = new Button(text);
+        b.setFont(Font.font("System", 16));
+        b.setTextFill(Color.WHITE);
+        b.setStyle(
+            "-fx-background-color: #1e1e1e;" +
+            "-fx-background-radius: 6;" +
+            "-fx-cursor: hand;" +
+            "-fx-padding: 4 10;"
+        );
+        return b;
+    }
+    public BorderPane getRoot() { return root; }
+}
