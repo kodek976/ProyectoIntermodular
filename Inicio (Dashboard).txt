@@ -1,0 +1,230 @@
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.*;
+public class DashboardView {
+    private final BorderPane root;
+    public DashboardView(Main app) {
+        root = new BorderPane();
+        root.setStyle("-fx-background-color: " + LoginView.BG + ";");
+        root.setTop(buildTopBar(app));
+        root.setCenter(buildContent());
+        root.setBottom(buildNavBar(app, "inicio"));
+    }
+    // ── Top bar ───────────────────────────────────────────────────────────────
+    private HBox buildTopBar(Main app) {
+        Label icon = new Label("⚙");
+        icon.setTextFill(Color.web(LoginView.ACCENT));
+        icon.setStyle(
+            "-fx-background-color: #1e3a5f;" +
+            "-fx-background-radius: 8;" +
+            "-fx-padding: 6 8;"
+        );
+        VBox brand = new VBox(0,
+            labelBold("YENAIAL", 13, "#ffffff"),
+            labelPlain("Taller de Bicicletas", 10, LoginView.TEXT_SUB)
+        );
+        Region sp = new Region();
+        HBox.setHgrow(sp, Priority.ALWAYS);
+        Button salir = dangerButton("SALIR");
+        salir.setOnAction(e -> app.showLogin());
+        Label avatar = new Label("AB");
+        avatar.setFont(Font.font("System", FontWeight.BOLD, 12));
+        avatar.setTextFill(Color.WHITE);
+        avatar.setStyle(
+            "-fx-background-color: #374151;" +
+            "-fx-background-radius: 20;" +
+            "-fx-padding: 8 10;"
+        );
+        HBox bar = new HBox(10, icon, brand, sp, salir, avatar);
+        bar.setAlignment(Pos.CENTER_LEFT);
+        bar.setPadding(new Insets(12, 16, 12, 16));
+        bar.setStyle("-fx-border-color: #222222; -fx-border-width: 0 0 1 0;");
+        return bar;
+    }
+    // ── Content ───────────────────────────────────────────────────────────────
+    private ScrollPane buildContent() {
+        // Saludo
+        Label greet = new Label("Hola,");
+        greet.setFont(Font.font("System", FontWeight.BOLD, 24));
+        greet.setTextFill(Color.WHITE);
+        // Estado card
+        Label estadoSub  = labelPlain("Estado actual", 11, LoginView.TEXT_SUB);
+        Label estadoVal  = labelBold("Sin reservas activos", 15, LoginView.ACCENT);
+        Label wrench = new Label("🔧");
+        wrench.setFont(Font.font(22));
+        wrench.setStyle(
+            "-fx-background-color: #1e3a5f;" +
+            "-fx-background-radius: 20;" +
+            "-fx-padding: 10;"
+        );
+        Region espWrench = new Region();
+        HBox.setHgrow(espWrench, Priority.ALWAYS);
+        HBox estadoTop = new HBox(new VBox(2, estadoSub, estadoVal), espWrench, wrench);
+        estadoTop.setAlignment(Pos.CENTER_LEFT);
+        // Steps
+        HBox steps = buildSteps();
+        VBox estadoCard = new VBox(12, estadoTop, steps);
+        estadoCard.setPadding(new Insets(16));
+        cardStyle(estadoCard);
+        // Mini tarjetas
+        VBox diasCard    = miniCard("-", "días", "Próximo servicio", LoginView.ACCENT);
+        VBox compCard    = miniCard("-", "Componentes", "", "#22c55e");
+        VBox alertCard   = miniCard("-", "Alertas", "", "#ef4444");
+        HBox miniRow = new HBox(10, diasCard, compCard, alertCard);
+        HBox.setHgrow(diasCard, Priority.ALWAYS);
+        HBox.setHgrow(compCard, Priority.ALWAYS);
+        HBox.setHgrow(alertCard, Priority.ALWAYS);
+        // Actividad reciente
+        Label actTitle = labelBold("Actividad reciente", 15, "#ffffff");
+        Label emptyIcon = new Label("ⓘ");
+        emptyIcon.setFont(Font.font(28));
+        emptyIcon.setTextFill(Color.web("#555555"));
+        Label emptyL1 = labelPlain("Aún no hay actividad registrada.", 13, LoginView.TEXT_SUB);
+        Label emptyL2 = labelPlain("Realiza una reserva para comenzar.", 13, LoginView.TEXT_SUB);
+        VBox empty = new VBox(6, emptyIcon, emptyL1, emptyL2);
+        empty.setAlignment(Pos.CENTER);
+        empty.setPadding(new Insets(40, 0, 20, 0));
+        // FAB
+        Button fab = new Button("+");
+        fab.setFont(Font.font("System", FontWeight.BOLD, 22));
+        fab.setTextFill(Color.WHITE);
+        fab.setPrefSize(52, 52);
+        fab.setStyle(
+            "-fx-background-color: " + LoginView.ACCENT + ";" +
+            "-fx-background-radius: 26;" +
+            "-fx-cursor: hand;"
+        );
+        StackPane fabWrap = new StackPane(fab);
+        fabWrap.setAlignment(Pos.CENTER_RIGHT);
+        VBox content = new VBox(14,
+            greet, estadoCard, miniRow, actTitle, empty, fabWrap
+        );
+        content.setPadding(new Insets(20, 16, 20, 16));
+        ScrollPane sp = new ScrollPane(content);
+        sp.setFitToWidth(true);
+        sp.setStyle("-fx-background: " + LoginView.BG + "; -fx-background-color: " + LoginView.BG + ";");
+        sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        return sp;
+    }
+    private HBox buildSteps() {
+        String[] labels = {"Diagnóstico", "Reparación", "Pruebas", "Listo"};
+        HBox row = new HBox();
+        row.setAlignment(Pos.CENTER);
+        for (int i = 0; i < labels.length; i++) {
+            Label circle = new Label("✓");
+            circle.setFont(Font.font(10));
+            circle.setTextFill(Color.web("#555555"));
+            circle.setStyle(
+                "-fx-border-color: #444444;" +
+                "-fx-border-radius: 12;" +
+                "-fx-padding: 4 7;"
+            );
+            Label lbl = labelPlain(labels[i], 10, "#555555");
+            VBox step = new VBox(4, circle, lbl);
+            step.setAlignment(Pos.CENTER);
+            HBox.setHgrow(step, Priority.ALWAYS);
+            row.getChildren().add(step);
+            if (i < labels.length - 1) {
+                Label line = new Label("─────");
+                line.setTextFill(Color.web("#333333"));
+                row.getChildren().add(line);
+            }
+        }
+        return row;
+    }
+    private VBox miniCard(String value, String coloredLabel, String sub, String color) {
+        Label val  = labelBold(value, 18, color);
+        Label lbl  = labelBold(coloredLabel, 12, color);
+        Label subL = labelPlain(sub, 11, LoginView.TEXT_SUB);
+        VBox card = new VBox(2, val, lbl, subL);
+        card.setAlignment(Pos.CENTER);
+        card.setPadding(new Insets(14));
+        cardStyle(card);
+        return card;
+    }
+    public BorderPane getRoot() { return root; }
+    // ── Nav bar (shared) ───────────────────────────────────────────────────────
+    static HBox buildNavBar(Main app, String active) {
+        HBox nav = new HBox();
+        nav.setStyle(
+            "-fx-background-color: #111111;" +
+            "-fx-border-color: #222222;" +
+            "-fx-border-width: 1 0 0 0;"
+        );
+        String[][] items = {
+            {"🏠", "Inicio"},
+            {"👤", "Garaje"},
+            {"📅", "Reservas"},
+            {"🧰", "Asistente"}
+        };
+        for (String[] item : items) {
+            boolean isActive = item[1].toLowerCase().equals(active);
+            VBox btn = navItem(item[0], item[1], isActive);
+            HBox.setHgrow(btn, Priority.ALWAYS);
+            btn.setOnMouseClicked(e -> {
+                switch (item[1]) {
+                    case "Inicio"     -> app.showDashboard();
+                    case "Garaje"     -> app.showGaraje();
+                    case "Reservas"   -> app.showReservas();
+                    case "Asistente"  -> app.showAsistente();
+                }
+            });
+            nav.getChildren().add(btn);
+        }
+        return nav;
+    }
+    private static VBox navItem(String emoji, String label, boolean active) {
+        Label ico = new Label(emoji);
+        ico.setFont(Font.font(18));
+        ico.setTextFill(active ? Color.web(LoginView.ACCENT) : Color.web("#666666"));
+        Label lbl = new Label(label);
+        lbl.setFont(Font.font("System", 10));
+        lbl.setTextFill(active ? Color.web(LoginView.ACCENT) : Color.web("#666666"));
+        VBox box = new VBox(2, ico, lbl);
+        box.setAlignment(Pos.CENTER);
+        box.setPadding(new Insets(8, 0, 8, 0));
+        if (active) {
+            box.setStyle("-fx-border-color: " + LoginView.ACCENT + "; -fx-border-width: 2 0 0 0;");
+        }
+        return box;
+    }
+    // ── Style helpers ─────────────────────────────────────────────────────────
+    static void cardStyle(Region r) {
+        r.setStyle(
+            "-fx-background-color: #1a1a1a;" +
+            "-fx-background-radius: 10;" +
+            "-fx-border-color: #2a2a2a;" +
+            "-fx-border-radius: 10;" +
+            "-fx-border-width: 1;"
+        );
+    }
+    static Label labelBold(String text, double size, String color) {
+        Label l = new Label(text);
+        l.setFont(Font.font("System", FontWeight.BOLD, size));
+        l.setTextFill(Color.web(color));
+        return l;
+    }
+    static Label labelPlain(String text, double size, String color) {
+        Label l = new Label(text);
+        l.setFont(Font.font("System", size));
+        l.setTextFill(Color.web(color));
+        return l;
+    }
+    static Button dangerButton(String text) {
+        Button b = new Button(text);
+        b.setFont(Font.font("System", FontWeight.BOLD, 11));
+        b.setStyle(
+            "-fx-background-color: transparent;" +
+            "-fx-text-fill: #ef4444;" +
+            "-fx-border-color: #ef4444;" +
+            "-fx-border-radius: 6;" +
+            "-fx-background-radius: 6;" +
+            "-fx-cursor: hand;" +
+            "-fx-padding: 4 10;"
+        );
+        return b;
+    }
+}

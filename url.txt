@@ -1,0 +1,6 @@
+http://54.156.230.183/phpmyadmin/index.php
+http://54.156.230.183/phpmyadmin/index.php?route=/database/structure&db=yenaial
+ec2-54-156-230-183.compute-1.amazonaws.com |
+
+ip elastica: 54.156.230.183
+ssh -i 'C:\Users\FP\Desktop\taller\labsuser (1).pem' ubuntu@ec2-54-156-230-183.compute-1.amazonaws.com

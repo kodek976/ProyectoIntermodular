@@ -1,0 +1,63 @@
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.*;
+public class GarajeView {
+    private final BorderPane root;
+    public GarajeView(Main app) {
+        root = new BorderPane();
+        root.setStyle("-fx-background-color: " + LoginView.BG + ";");
+        root.setTop(buildTopBar(app));
+        root.setCenter(buildContent());
+        root.setBottom(DashboardView.buildNavBar(app, "garaje"));
+    }
+    private HBox buildTopBar(Main app) {
+        Label icon = new Label("⚙");
+        icon.setTextFill(Color.web(LoginView.ACCENT));
+        icon.setStyle("-fx-background-color: #1e3a5f; -fx-background-radius: 8; -fx-padding: 6 8;");
+        VBox brand = new VBox(0,
+            DashboardView.labelBold("YENAIAL", 13, "#ffffff"),
+            DashboardView.labelPlain("Taller de Bicicletas", 10, LoginView.TEXT_SUB)
+        );
+        Region sp = new Region();
+        HBox.setHgrow(sp, Priority.ALWAYS);
+        Button salir = DashboardView.dangerButton("SALIR");
+        salir.setOnAction(e -> app.showLogin());
+        HBox bar = new HBox(10, icon, brand, sp, salir);
+        bar.setAlignment(Pos.CENTER_LEFT);
+        bar.setPadding(new Insets(12, 16, 12, 16));
+        bar.setStyle("-fx-border-color: #222222; -fx-border-width: 0 0 1 0;");
+        return bar;
+    }
+    private VBox buildContent() {
+        Label title    = DashboardView.labelBold("Mi Garaje", 22, "#ffffff");
+        Label subtitle = DashboardView.labelPlain("Ficha técnica de tu bicicleta", 13, LoginView.TEXT_SUB);
+        // Empty state
+        Label plusIcon = new Label("+");
+        plusIcon.setFont(Font.font("System", FontWeight.LIGHT, 36));
+        plusIcon.setTextFill(Color.web("#555555"));
+        plusIcon.setStyle(
+            "-fx-border-color: #555555;" +
+            "-fx-border-radius: 24;" +
+            "-fx-padding: 10 16;"
+        );
+        Label emptyMsg = DashboardView.labelPlain(
+            "No tienes ninguna bicicleta registrada todavía.", 13, LoginView.TEXT_SUB
+        );
+        Button regBtn = new Button("Registrar mi bicicleta");
+        regBtn.setPrefHeight(40);
+        regBtn.setPrefWidth(220);
+        regBtn.setFont(Font.font("System", FontWeight.BOLD, 13));
+        LoginView.stylePrimaryButton(regBtn);
+        VBox emptyState = new VBox(14, plusIcon, emptyMsg, regBtn);
+        emptyState.setAlignment(Pos.CENTER);
+        emptyState.setPadding(new Insets(60, 0, 0, 0));
+        VBox content = new VBox(6, title, subtitle, emptyState);
+        content.setPadding(new Insets(20, 16, 20, 16));
+        VBox.setVgrow(emptyState, Priority.ALWAYS);
+        return content;
+    }
+    public BorderPane getRoot() { return root; }
+}
